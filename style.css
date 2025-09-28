@@ -1,0 +1,42 @@
+body {
+    font-family: 'Arial', sans-serif; /* 更具体的字体 */
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6; /* 提高可读性 */
+    margin: 0; /* 移除默认的 body 外边距 */
+    padding: 0;
+}
+
+h1 {
+    color: #007bff; /* 一种漂亮的蓝色 */
+    text-align: center;
+    padding: 20px;
+    margin: 20px auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 80%; /* 调整宽度 */
+    max-width: 600px; /* 限制最大宽度 */
+}
+
+p {
+    font-size: 18px;
+    margin: 10px 20px;
+}
+
+img {
+    max-width: 100%; /* 使图片响应式 */
+    height: auto;
+    display: block; /* 移除图片下方的额外空间 */
+    margin: 20px auto;
+    border-radius: 5px;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none; /* 移除下划线 */
+}
+
+a:hover {
+    text-decoration: underline; /* 鼠标悬停时添加下划线 */
+}
