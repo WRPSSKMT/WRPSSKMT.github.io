@@ -30,8 +30,8 @@ import_dotenv.default.config();
 var app = (0, import_express.default)();
 var PORT = 3e3;
 app.use(import_express.default.json());
-var getGeminiClient = () => {
-  const apiKey = process.env.GEMINI_API_KEY;
+var getGeminiClient = (passedKey) => {
+  const apiKey = passedKey || process.env.GEMINI_API_KEY;
   if (!apiKey) {
     console.warn("WARNING: GEMINI_API_KEY is not defined. AI course generation will fail.");
   }
@@ -49,14 +49,17 @@ app.post("/api/courses/generate", async (req, res) => {
   if (!topic || typeof topic !== "string" || topic.trim() === "") {
     return res.status(400).json({ error: "\u8BF7\u8F93\u5165\u6709\u6548\u7684\u63A2\u7D22\u4E3B\u9898" });
   }
-  const apiKey = process.env.GEMINI_API_KEY;
+  const clientApiKey = req.headers["x-gemini-api-key"] || req.body.apiKey;
+  const apiKey = typeof clientApiKey === "string" && clientApiKey.trim() !== "" ? clientApiKey.trim() : process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({
-      error: "Gemini API key is not configured in Secrets. Please add GEMINI_API_KEY to Settings > Secrets."
+    console.log(`No Gemini API Key provided. AI Custom route generation is locked.`);
+    return res.status(401).json({
+      success: false,
+      error: "AI \u5B9A\u5236\u670D\u52A1\u6682\u4E0D\u5F00\u653E\u9ED8\u8BA4\u514D Key \u4F53\u9A8C\u3002\u4E3A\u4E86\u4F7F\u7528\u5B9A\u5236\u8DEF\u7EBF\u529F\u80FD\uFF0C\u8BF7\u5728\u524D\u7AEF\u8F93\u5165\u60A8\u7684 Google Gemini API \u5BC6\u94A5\u3002"
     });
   }
   try {
-    const ai = getGeminiClient();
+    const ai = getGeminiClient(apiKey);
     const prompt = `You are "Compass", a cute, gamified AI learning roadmap companion.
 Design a cohesive, step-by-step learning roadmap of 5 to 7 sequential nodes for the topic: "${topic}".
 
